@@ -1,10 +1,10 @@
 AriesDMD Library
 ================
 
-Author: Nishil Patel  
-Compatiblility: RISC-V boards (Specifically Desgined for Vega Aries V3 by C-DAC)
-Project Type: Academic & Experimental  
-Status: Active Development  
+- Author: Nishil Patel  
+- Compatiblility: RISC-V boards (Specifically Desgined for Vega Aries V3 by C-DAC)
+- Project Type: Academic & Experimental  
+- Status: Active Development  
 
 ---
 
