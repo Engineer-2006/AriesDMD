@@ -43,14 +43,6 @@ critical timing signals.
 
 ---
 
-### Graphics Modes
-
-- Normal
-- Inverse
-- Toggle
-
----
-
 ### Display Architecture
 
 Each P10 panel consists of:
