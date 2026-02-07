@@ -1,19 +1,16 @@
-#include <AriesDMD.h>
+#include "AriesDMD.h"
 
-AriesDMDPins pins = {
-  .data = 10,
-  .clk  = 8,
-  .lat  = 9,
-  .oe   = 15,
-  .a    = 6,
-  .b    = 7
-};
-
-AriesDMD dmd(1, 1, pins); // Single Panel
+// panelsWide = 1  → number of P10 panels horizontally
+// panelsHigh = 1  → number of P10 panels vertically
+// pinOE  = 9  → Output Enable
+// pinA   = 6  → Row select A
+// pinB   = 7  → Row select B
+// pinLAT = 8  → Latch (STB)
+AriesDMD dmd(1, 1, 9, 6, 7, 8);
 
 void setup() {
   dmd.begin();
-  dmd.writePixel(5, 5, GRAPHICS_NORMAL, true); // Fifth Row, Fifth Column Led will be high
+  dmd.writePixel(0, 0, GRAPHICS_NORMAL, true); // First led on the top left corner will be on.
 }
 
 void loop() {
