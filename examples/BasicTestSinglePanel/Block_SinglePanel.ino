@@ -10,7 +10,11 @@ AriesDMD dmd(1, 1, 9, 6, 7, 8);
 
 void setup() {
   dmd.begin();
-  dmd.writePixel(0, 0, GRAPHICS_NORMAL, true); // First led on the top left corner will be on.
+  for(int i = 0; i < 4; i++){
+    for (int j = 0; j < 4; j++){
+      dmd.writePixel(i, j, GRAPHICS_NORMAL, true); // A block of size 4*4 will be created on top left corner.
+    }
+  }
 }
 
 void loop() {
