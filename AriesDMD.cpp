@@ -1,118 +1,109 @@
 #include "AriesDMD.h"
 
-AriesDMD::AriesDMD(uint8_t w, uint8_t h, AriesDMDPins p)
-  : pins(p), panelsWide(w), panelsHigh(h)
+// VEGA SPI INSTANCE
+SPIClass SPI(0); // You can change this section if you are using another SPI pins on the Aries v3 baord.
+
+static SPISettings dmdSPI(2000000, MSBFIRST, SPI_MODE0);
+
+static const uint8_t pixelMask[8] =
 {
-  totalPanels = panelsWide * panelsHigh;
-  screenRAM = (uint8_t*)malloc(totalPanels * DMD_RAM_BYTES_PER_PANEL);
-  scanPlane = 0;
+  0x80,0x40,0x20,0x10,0x08,0x04,0x02,0x01
+};
+
+AriesDMD::AriesDMD(uint8_t pw, uint8_t ph,
+                   uint8_t oe, uint8_t a,
+                   uint8_t b,  uint8_t lat)
+{
+  panelsWide  = pw;
+  panelsHigh  = ph;
+
+  pinOE  = oe;
+  pinA   = a;
+  pinB   = b;
+  pinLAT = lat;
+
+  displayWidth  = panelsWide  * PANEL_WIDTH;
+  displayHeight = panelsHigh  * PANEL_HEIGHT;
+
+  rowWidthBytes = panelsWide * 4;
+  frameBytes    = rowWidthBytes * displayHeight;
+
+  frameBuffer = (uint8_t*)malloc(frameBytes);
+  scanRow = 0;
 }
 
 void AriesDMD::begin() {
-  pinMode(pins.data, OUTPUT);
-  pinMode(pins.clk,  OUTPUT);
-  pinMode(pins.lat,  OUTPUT);
-  pinMode(pins.oe,   OUTPUT);
-  pinMode(pins.a,    OUTPUT);
-  pinMode(pins.b,    OUTPUT);
+  pinMode(pinOE, OUTPUT);
+  pinMode(pinA,  OUTPUT);
+  pinMode(pinB,  OUTPUT);
+  pinMode(pinLAT,OUTPUT);
 
-  digitalWrite(pins.oe, HIGH);
+  digitalWrite(pinOE, HIGH);
+  digitalWrite(pinLAT, LOW);
+
+  SPI.begin();
+  SPI.beginTransaction(dmdSPI);
+
   clearScreen(true);
 }
 
 void AriesDMD::clearScreen(bool normal) {
-  memset(screenRAM,
-         normal ? 0xFF : 0x00,
-         totalPanels * DMD_RAM_BYTES_PER_PANEL);
+  memset(frameBuffer, normal ? 0xFF : 0x00, frameBytes);
 }
 
-uint16_t AriesDMD::width() const {
-  return panelsWide * DMD_PANEL_WIDTH;
-}
+void AriesDMD::writePixel(uint16_t x, uint16_t y,
+                          uint8_t mode, bool pixel)
+{
+  if (x >= displayWidth || y >= displayHeight) return;
 
-uint16_t AriesDMD::height() const {
-  return panelsHigh * DMD_PANEL_HEIGHT;
-}
+  uint16_t panelX = x / PANEL_WIDTH;
+  uint8_t  localX = x % PANEL_WIDTH;
 
-void AriesDMD::writePixel(uint16_t x, uint16_t y, uint8_t mode, bool pixel) {
-  if (x >= width() || y >= height()) return;
+  uint16_t byteCol = panelX * 4 + (localX >> 3);
+  uint8_t  mask    = pixelMask[localX & 7];
 
-  // Determine panel
-  uint8_t panelX = x / DMD_PANEL_WIDTH;
-  uint8_t panelY = y / DMD_PANEL_HEIGHT;
-  uint16_t panelIndex = panelY * panelsWide + panelX;
-  uint16_t panelBase = panelIndex * DMD_RAM_BYTES_PER_PANEL;
-
-  // Local pixel
-  uint8_t lx = x % DMD_PANEL_WIDTH;
-  uint8_t ly = y % DMD_PANEL_HEIGHT;
-
-  // Mapping for 1/4 scan P10
-  uint8_t plane = ly & 0x03;
-  uint8_t row   = ly >> 2;
-  uint8_t col   = lx >> 3;
-  uint8_t bit   = lx & 0x07;
-
-  uint16_t index =
-    panelBase +
-    (plane << 4) +
-    (row << 2) +
-    col;
-
-  uint8_t mask = 0x80 >> bit;
+  uint32_t index = y * rowWidthBytes + byteCol;
 
   switch (mode) {
     case GRAPHICS_NORMAL:
-      pixel ? (screenRAM[index] &= ~mask)
-            : (screenRAM[index] |=  mask);
+      pixel ? (frameBuffer[index] &= ~mask)
+            : (frameBuffer[index] |=  mask);
       break;
 
     case GRAPHICS_INVERSE:
-      pixel ? (screenRAM[index] |=  mask)
-            : (screenRAM[index] &= ~mask);
+      pixel ? (frameBuffer[index] |=  mask)
+            : (frameBuffer[index] &= ~mask);
       break;
 
     case GRAPHICS_TOGGLE:
-      if (pixel) screenRAM[index] ^= mask;
+      if (pixel) frameBuffer[index] ^= mask;
       break;
-  }
-}
-
-void AriesDMD::shiftOutByte(uint8_t data) {
-  for (int i = 0; i < 8; i++) {
-    digitalWrite(pins.data, data & 0x80);
-    digitalWrite(pins.clk, HIGH);
-    digitalWrite(pins.clk, LOW);
-    data <<= 1;
   }
 }
 
 void AriesDMD::scanDisplay() {
-  digitalWrite(pins.oe, HIGH); 
 
-  // Shift data for ALL panels (rightmost first)
-  for (int p = totalPanels - 1; p >= 0; p--) {
-    uint16_t base =
-      p * DMD_RAM_BYTES_PER_PANEL +
-      (scanPlane << 4);
+  digitalWrite(pinOE, HIGH);
 
-    for (int i = 0; i < DMD_BYTES_PER_PLANE; i++) {
-      shiftOutByte(screenRAM[base + i]);
-    }
+  uint8_t r0 = scanRow;
+  uint8_t r1 = scanRow + 4;
+  uint8_t r2 = scanRow + 8;
+  uint8_t r3 = scanRow + 12;
+
+  for (uint16_t col = 0; col < rowWidthBytes; col++) {
+    SPI.transfer(frameBuffer[r3 * rowWidthBytes + col]);
+    SPI.transfer(frameBuffer[r2 * rowWidthBytes + col]);
+    SPI.transfer(frameBuffer[r1 * rowWidthBytes + col]);
+    SPI.transfer(frameBuffer[r0 * rowWidthBytes + col]);
   }
 
-  // Latch data
-  digitalWrite(pins.lat, HIGH);
-  digitalWrite(pins.lat, LOW);
+  digitalWrite(pinLAT, HIGH);
+  digitalWrite(pinLAT, LOW);
 
-  // Select row plane
-  digitalWrite(pins.a, scanPlane & 0x01);
-  digitalWrite(pins.b, (scanPlane >> 1) & 0x01);
+  digitalWrite(pinA, scanRow & 1);
+  digitalWrite(pinB, (scanRow >> 1) & 1);
 
-  // Enable output
-  digitalWrite(pins.oe, LOW);
-  delayMicroseconds(80);
-  digitalWrite(pins.oe, HIGH);
+  digitalWrite(pinOE, LOW);
 
-  scanPlane = (scanPlane + 1) & 0x03;
+  scanRow = (scanRow + 1) & 3;
 }
