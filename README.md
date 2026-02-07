@@ -1,63 +1,62 @@
-AriesDMD Library
+# AriesDMD Library
 
-Author: Nishil Patel
-Target Platform: RISC-V (Vega Aries V3 by C-DAC)
-Panel Type: HUB75 P10 (32×16)
-Project Type: Academic & Experimental
-Status: Stable & Actively Maintained
+**Author:** Nishil Patel  
+**Platform:** RISC-V (Specifically designed for Vega Aries V3 – C-DAC)  
+**Project Type:** Academic & Experimental  
+**Status:** Stable / Actively Maintained  
 
-Overview
+---
 
-AriesDMD is a lightweight and deterministic driver library for P10 LED matrix panels, specifically designed for RISC-V based microcontrollers such as Vega Aries V3.
+## Overview
 
-Traditional Arduino DMD libraries were designed around AVR timing assumptions and often fail on modern architectures due to:
+**AriesDMD** is a lightweight and deterministic driver library for **P10 LED matrix panels**, specifically designed for **RISC-V based microcontrollers** such as **Vega Aries V3**.
 
-SPI buffering
+Traditional Arduino DMD libraries were designed around **AVR timing assumptions** and often fail on modern architectures due to:
 
-Non-deterministic execution
+- SPI buffering  
+- Non-deterministic execution  
+- Hidden FIFO behavior  
 
-Hidden FIFO behavior
+AriesDMD solves these issues by implementing **explicit, timing-safe display scanning** while still using **hardware SPI for data transfer**, ensuring:
 
-AriesDMD solves these issues by implementing explicit, timing-safe display scanning while still using hardware SPI for data transfer, ensuring:
+- Correct pixel indexing  
+- Stable refresh  
+- Flicker-free output 
 
-Correct pixel indexing
+---
 
-Stable refresh
+## Supported Hardware
 
-Flicker-free output
+- Vega Aries V3 (RISC-V)
+- P10 LED Matrix Panels (32 × 16)
+- 1/4 Scan HUB75 panels (A, B row select)
 
-Key Highlights
+---
 
-✅ User-defined pin configuration
+## Key Features
 
-✅ Supports multiple chained P10 panels
+- Deterministic display scanning
+- Hardware SPI based data transfer
+- User-defined control pins (OE, LAT, A, B)
+- Supports multiple cascaded P10 panels
+- Pixel-level graphics control
+- Minimal RAM footprint
+- Designed specifically for RISC-V timing behavior
 
-✅ Hardware SPI based (deterministic control)
+---
 
-✅ Compatible with RISC-V architecture
+## Display Architecture
 
-✅ No dependency on AVR-specific behavior
+Each **P10 panel**:
 
-✅ Pixel-accurate mapping (verified via full indexing tests)
+- **Resolution:** 32 × 16 pixels  
+- **Scan type:** 1/4 scan  
+- **Row planes:** 4  
+- **Data format:** 8 pixels per byte  
+- **Framebuffer size:** 64 bytes per panel  
 
-Supported Hardware
+When **multiple panels** are connected:
 
-P10 LED Matrix Panel (32 × 16)
-
-HUB75 interface
-
-1/4 scan panels (A, B row select)
-
-Vega Aries V3 (RISC-V)
-
-Display Architecture
-
-Each single P10 panel:
-
-Resolution: 32 × 16 pixels
-
-Scan type: 1/4 scan
-
-Memory usage: 64 bytes per panel
-
-Data format: 8 pixels per byte
+- Width scales as `32 × panelsWide`
+- Height scales as `16 × panelsHigh`
+- Framebuffer scales automatically
