@@ -40,8 +40,8 @@ AriesDMD solves these issues by implementing **explicit, timing-safe display sca
 - User-defined control pins (OE, LAT, A, B)
 - Supports multiple cascaded P10 panels
 - Pixel-level graphics control
-- Minimal RAM footprint
-- Designed specifically for RISC-V timing behavior
+- Supports Character and String Rendering
+- Multi Panel Text Movement
 
 ---
 
@@ -55,8 +55,26 @@ Each **P10 panel**:
 - **Data format:** 8 pixels per byte  
 - **Framebuffer size:** 64 bytes per panel  
 
-When **multiple panels** are connected:
+--
 
-- Width scales as `32 × panelsWide`
-- Height scales as `16 × panelsHigh`
-- Framebuffer scales automatically
+## Pixel Coordinate Mapping
+
+**Single P10 Panel**:
+	-	Top-left pixel: (0, 0)
+	-	Top-right pixel: (31, 0)
+	-	Bottom-left pixel: (0, 15)
+	-	Bottom-right pixel: (31, 15)
+
+- Row 0   : (0,0)  (1,0)  (2,0)  ...  (31,0)
+- Row 1   : (0,1)  (1,1)  (2,1)  ...  (31,1)
+- ...
+- Row 15  : (0,15) (1,15) (2,15) ...  (31,15)
+
+**Multiple Panels (Cascaded)**:
+When multiple panels are connected, AriesDMD maintains a continuous linear coordinate space, independent of physical wiring order.
+- (0,0)   → first pixel of panel 1
+- (31,0)  → last pixel of panel 1
+- (32,0)  → first pixel of panel 2
+- (63,15) → last pixel of panel 2
+
+--
