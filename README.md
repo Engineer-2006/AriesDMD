@@ -65,10 +65,10 @@ Each **P10 panel**:
 	-	Bottom-left pixel: (0, 15)
 	-	Bottom-right pixel: (31, 15)
 
-- Row 0   : (0,0)  (1,0)  (2,0)  ...  (31,0)
-- Row 1   : (0,1)  (1,1)  (2,1)  ...  (31,1)
-- ...
-- Row 15  : (0,15) (1,15) (2,15) ...  (31,15)
+ Row 0   : (0,0)  (1,0)  (2,0)  ...  (31,0)
+ Row 1   : (0,1)  (1,1)  (2,1)  ...  (31,1)
+ ...
+ Row 15  : (0,15) (1,15) (2,15) ...  (31,15)
 
 **Multiple Panels (Cascaded)**:
 When multiple panels are connected, AriesDMD maintains a continuous linear coordinate space, independent of physical wiring order.
