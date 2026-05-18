@@ -1,80 +1,99 @@
 # AriesDMD Library
 
 **Author:** Nishil Patel  
-**Platform:** RISC-V (Specifically designed for Vega Aries V3 – C-DAC)  
+**Platform:** RISC-V (Vega Aries V3 – C-DAC)  
 **Project Type:** Academic & Experimental  
 **Status:** Stable / Actively Maintained  
 
 ---
 
-## Overview
+## 🚀 Overview
 
-**AriesDMD** is a lightweight and deterministic driver library for **P10 LED matrix panels**, specifically designed for **RISC-V based microcontrollers** such as **Vega Aries V3**.
+**AriesDMD** is a modular display driver library designed for **HUB75 LED matrix panels**, supporting both:
+- 🟢 **Monochrome P10 panels (32×16, 1/4 scan)**
+- 🌈 **RGB panels (80×40, 1/20 scan and beyond)**
 
-Traditional Arduino DMD libraries were designed around **AVR timing assumptions** and often fail on modern architectures due to:
-
-- SPI buffering  
+It is optimized specifically for **RISC-V based microcontrollers (Vega Aries V3)** where traditional Arduino libraries fail due to:
+- SPI buffering issues  
 - Non-deterministic execution  
 - Hidden FIFO behavior  
 
-AriesDMD solves these issues by implementing **explicit, timing-safe display scanning** while still using **hardware SPI for data transfer**, ensuring:
-
-- Correct pixel indexing  
-- Stable refresh  
-- Flicker-free output 
-
 ---
 
-## Supported Hardware
+## 🎯 Key Design Goals
+- Deterministic and timing-safe scanning  
+- Architecture-independent (RISC-V friendly)  
+- Clean pixel mapping independent of wiring  
+- Scalable to **large panel arrays (up to 100 panels)**  
+- Modular structure (RGB / Mono / Fonts separated)  
+- Future-ready for **WiFi / IoT text streaming**
 
+---
+## 🟢 Supported Hardware
+
+### Microcontroller
 - Vega Aries V3 (RISC-V)
-- P10 LED Matrix Panels (32 × 16)
-- 1/4 Scan HUB75 panels (A, B row select)
+
+### Displays
+
+#### Monochrome
+- P10 (32×16)
+- 1/4 Scan (A, B lines)
+- Multi-panel cascading
+
+#### RGB
+- HUB75 panels (80×40 tested)
+- 1/20 Scan (A–E lines)
+- Multi-panel cascading 
 
 ---
 
-## Key Features
+## ⚙️ Features
 
-- Deterministic display scanning
-- Hardware SPI based data transfer
-- User-defined control pins (OE, LAT, A, B)
-- Supports multiple cascaded P10 panels
-- Pixel-level graphics control
-- Supports Character and String Rendering
-- Multi Panel Text Movement
+### Core
+- Deterministic refresh engine  
+- Hardware-level control (CLK, LAT, OE, Row select)  
+- Pixel-level drawing  
+- Multi-panel cascading  
+
+### RGB Engine
+- Supports large tiled displays   
+- Scalable architecture for high panel count  
+
+### Font System (NEW)
+- Multiple fonts support  
+- Font scaling  
+- Arduino-style text rendering  
+- Shared across RGB & Mono  
+
+### Text Features
+- Static text rendering  
+- Multi-panel text positioning  
+- Ready for scrolling (future upgrade)
 
 ---
 
-## Display Architecture
+## 🧠 Display Architecture
 
-Each **P10 panel**:
+### Monochrome (P10)
+- Resolution: 32 × 16  
+- Scan: 1/4  
+- Framebuffer: 64 bytes per panel  
 
-- **Resolution:** 32 × 16 pixels  
-- **Scan type:** 1/4 scan  
-- **Row planes:** 4  
-- **Data format:** 8 pixels per byte  
-- **Framebuffer size:** 64 bytes per panel  
+### RGB (HUB75)
+- Resolution: 80 × 40 per panel  
+- Scan: 1/20  
+- Framebuffer: RGB per pixel  
 
---
+---
 
-## Pixel Coordinate Mapping
+## 📐 Pixel Coordinate Mapping
 
-**Single P10 Panel**:
--	Top-left pixel: (0, 0)
--	Top-right pixel: (31, 0)
--	Bottom-left pixel: (0, 15)
--	Bottom-right pixel: (31, 15)
+### Single Panel
+- Top-left: (0, 0)  
+- Bottom-right: (W-1, H-1)
 
-    - Row 0   : (0,0)  (1,0)  (2,0)  ...  (31,0)
-    - Row 1   : (0,1)  (1,1)  (2,1)  ...  (31,1)
-    - ...
-    - Row 15  : (0,15) (1,15) (2,15) ...  (31,15)
+### Multi-Panel
 
-**Multiple Panels (Cascaded)**:
-When multiple panels are connected, AriesDMD maintains a continuous linear coordinate space, independent of physical wiring order.
-- (0,0)   → first pixel of panel 1
-- (31,0)  → last pixel of panel 1
-- (32,0)  → first pixel of panel 2
-- (63,15) → last pixel of panel 2
+Panels are treated as a **continuous canvas**
 
---
