@@ -4,96 +4,76 @@
 **Platform:** RISC-V (Vega Aries V3 – C-DAC)  
 **Project Type:** Academic & Experimental  
 **Status:** Stable / Actively Maintained  
+---
+
+# 🚀 Overview
+
+AriesDMD is a modular display driver library designed specifically for P10 and HUB75 LED matrix panels on RISC-V based Vega Aries V3 boards.
+It supports:
+🟢 Monochrome P10 panels (32×16, 1/4 scan)
+🌈 RGB HUB75 panels (32×16, 1/8 scan and beyond)
+
+Most existing LED matrix libraries were written for AVR-based Arduino boards like Arduino UNO. Unlike traditional Arduino libraries designed for AVR microcontrollers, AriesDMD is built specifically for the Vega Aries architecture to provide:
+- Stable scanning
+- Correct pixel mapping
+- Flicker-free refresh
+- Multi-panel support
+- Clean framebuffer rendering
 
 ---
 
-## 🚀 Overview
-
-**AriesDMD** is a modular display driver library designed for **HUB75 LED matrix panels**, supporting both:
-- 🟢 **Monochrome P10 panels (32×16, 1/4 scan)**
-- 🌈 **RGB panels (80×40, 1/20 scan and beyond)**
-
-It is optimized specifically for **RISC-V based microcontrollers (Vega Aries V3)** where traditional Arduino libraries fail due to:
-- SPI buffering issues  
-- Non-deterministic execution  
-- Hidden FIFO behavior  
+**🎯 Key Design Goals** 
+- Deterministic and timing-safe scanning
+- RISC-V friendly architecture
+- Clean pixel mapping independent of wiring
+- Modular RGB / Mono architecture
+- Large multi-panel scalability
+- Future-ready for IoT text streaming
 
 ---
 
-## 🎯 Key Design Goals
-- Deterministic and timing-safe scanning  
-- Architecture-independent (RISC-V friendly)  
-- Clean pixel mapping independent of wiring  
-- Scalable to **large panel arrays (up to 100 panels)**  
-- Modular structure (RGB / Mono / Fonts separated)  
-- Future-ready for **WiFi / IoT text streaming**
+**🟢 Supported Hardware**
+Microcontroller
+Vega Aries V3 (C-DAC)
 
----
-## 🟢 Supported Hardware
-
-### Microcontroller
-- Vega Aries V3 (RISC-V)
-
-### Displays
-
-#### Monochrome
-- P10 (32×16)
-- 1/4 Scan (A, B lines)
-- Multi-panel cascading
-
-#### RGB
-- HUB75 panels (80×40 tested)
-- 1/20 Scan (A–E lines)
-- Multi-panel cascading 
-
----
-
-## ⚙️ Features
-
-### Core
-- Deterministic refresh engine  
-- Hardware-level control (CLK, LAT, OE, Row select)  
-- Pixel-level drawing  
-- Multi-panel cascading  
-
-### RGB Engine
-- Supports large tiled displays   
-- Scalable architecture for high panel count  
-
-### Font System (NEW)
-- Multiple fonts support  
-- Font scaling  
-- Arduino-style text rendering  
-- Shared across RGB & Mono  
-
-### Text Features
-- Static text rendering  
-- Multi-panel text positioning  
-- Ready for scrolling (future upgrade)
-
----
-
-## 🧠 Display Architecture
-
-### Monochrome (P10)
-- Resolution: 32 × 16  
-- Scan: 1/4  
-- Framebuffer: 64 bytes per panel  
-
-### RGB (HUB75)
-- Resolution: 80 × 40 per panel  
-- Scan: 1/20  
-- Framebuffer: RGB per pixel  
-
----
-
-## 📐 Pixel Coordinate Mapping
-
-### Single Panel
-- Top-left: (0, 0)  
-- Bottom-right: (W-1, H-1)
-
-### Multi-Panel
-
-Panels are treated as a **continuous canvas**
+**🖥 Supported Displays**
+Monochrome Panels
+Panel	Resolution	Interface	Scan
+P10	32×16	HUB12	1/4
+Features
+Multi-panel cascading
+SPI-based scanning
+Text rendering
+Pixel drawing
+RGB Panels
+Panel	Resolution	Interface	Scan
+HUB75 RGB	32×16	HUB75	1/8
+Features
+RGB framebuffer
+Multi-panel cascading
+Text rendering
+Basic RGB color support
+⚙️ Features
+Core Engine
+Deterministic refresh engine
+Hardware-level CLK/LAT/OE control
+Pixel-level drawing
+Framebuffer-based rendering
+Multi-panel support
+Scalable architecture
+RGB Engine
+HUB75 RGB panel support
+Multi-panel RGB canvas
+8 basic RGB colors
+Shared font rendering system
+Font System
+5×7 font rendering
+Shared between RGB & Mono
+Lightweight implementation
+Arduino-style API
+Text Features
+Static text rendering
+Multi-panel text positioning
+Scrolling text support
+Shared font engine
 
