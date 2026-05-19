@@ -55,3 +55,4 @@ Vega Aries V3 (C-DAC)
 - Multi-panel cascading
 - Text rendering
 - 8 colour options
+- Pixel drawing
