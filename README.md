@@ -43,8 +43,7 @@ Vega Aries V3 (C-DAC)
 | Monochrome P10 panels           |     HUB12     |    32x16   |     1/4     | AriesDMD.h, AriesDMD.cpp                     |
 | | | | | |
 | Indoor RGB                      |     HUB75     |    32x16   |     1/8     | AriesRGB32x16.h, AriesRGB32x16.cpp           |
-|                                 |               |    80x40   |     1/20    | AriesRGB.h, AriesRGB.cpp                                             |
-| | | | | |
+|                                 |               |    80x40   |     1/20    | AriesRGB.h, AriesRGB.cpp                     |
   
 --> Features:
 - Multi-panel cascading
@@ -57,12 +56,14 @@ Vega Aries V3 (C-DAC)
 **Pixel Coordinate System**
 
  Single Panel:
+ '''text
  (0,0) -----------------> X
   |
   |
   |
   v
   Y
+  '''
 
   - Top left corner: (0,0)
   - Bottom right corner: (W-1,H-1)
