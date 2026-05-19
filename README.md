@@ -38,21 +38,31 @@ Vega Aries V3 (C-DAC)
 
 **🖥 Supported Displays**
 
-**1) Monochrome Panels**
-- P10	32×16	Pixels 1/4 Scanning
-  
---> Features:
-- Multi-panel cascading
-- SPI-based scanning
-- Text rendering
-- Pixel drawing
-
-**2) RGB Panels**
-- HUB75 RGB	32×16 Pixels	1/8 Scanning
-- HUB75 RGB 80X40 Pixels 1/20 Scanning
+| **Description**                 | **Interface** | **Pixels** |   **Scan**  | **Code module**                              |
+|---------------------------------|:-------------:|:----------:|:-----------:|----------------------------------------------|
+| Monochrome P10 panels           |     HUB12     |    32x16   |     1/4     | AriesDMD.h, AriesDMD.cpp                     |
+| | | | | |
+| Indoor RGB                      |     HUB75     |    32x16   |     1/8     | AriesRGB32x16.h, AriesRGB32x16.cpp           |
+|                                 |               |    80x40   |     1/20    | AriesRGB.h, AriesRGB.cpp                                             |
+| | | | | |
   
 --> Features:
 - Multi-panel cascading
 - Text rendering
 - 8 colour options
 - Pixel drawing
+
+---
+
+**Pixel Coordinate System**
+
+ Single Panel:
+ (0,0) -----------------> X
+  |
+  |
+  |
+  v
+  Y
+
+  - Top left corner: (0,0)
+  - Bottom right corner: (W-1,H-1)
