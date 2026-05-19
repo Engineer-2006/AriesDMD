@@ -22,7 +22,7 @@ Most existing LED matrix libraries were written for AVR-based Arduino boards lik
 
 ---
 
-**🎯 Key Design Goals** 
+# 🎯 Key Design Goals
 - Deterministic and timing-safe scanning
 - RISC-V friendly architecture
 - Clean pixel mapping independent of wiring
@@ -32,11 +32,11 @@ Most existing LED matrix libraries were written for AVR-based Arduino boards lik
 
 ---
 
-**🟢 Supported Hardware**
+# 🟢 Supported Hardware**
 Microcontroller
 Vega Aries V3 (C-DAC)
 
-**🖥 Supported Displays**
+# 🖥 Supported Displays
 
 | **Description**                 | **Interface** | **Pixels** |   **Scan**  | **Code module**                              |
 |---------------------------------|:-------------:|:----------:|:-----------:|----------------------------------------------|
@@ -53,7 +53,7 @@ Vega Aries V3 (C-DAC)
 
 ---
 
-**Pixel Coordinate System**
+ # Pixel Coordinate System
 
  Single Panel:
 ```text
@@ -67,5 +67,9 @@ Vega Aries V3 (C-DAC)
 
 - Top left corner: (0,0)
 - Bottom right corner: (W-1,H-1)
+
+Multi Panel: Multiple panels are treated as one continuous display canvas.
+Example: AriesDMD dmd(4,1,...);
+Creates: 128 × 16 display 
 
 ---
