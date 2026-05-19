@@ -39,7 +39,6 @@ Most existing LED matrix libraries were written for AVR-based Arduino boards lik
 | **Description**                 | **Interface** | **Pixels** |   **Scan**  | **Code module**                              |
 |---------------------------------|:-------------:|:----------:|:-----------:|----------------------------------------------|
 | Monochrome P10 panels           |     HUB12     |    32x16   |     1/4     | AriesDMD.h, AriesDMD.cpp                     |
-| | | | | |
 | Indoor RGB                      |     HUB75     |    32x16   |     1/8     | AriesRGB32x16.h, AriesRGB32x16.cpp           |
 |                                 |               |    80x40   |     1/20    | AriesRGB.h, AriesRGB.cpp                     |
   
