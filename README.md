@@ -37,6 +37,7 @@ Microcontroller
 Vega Aries V3 (C-DAC)
 
 **🖥 Supported Displays**
+
 **1) Monochrome Panels**
 - P10	32×16	Pixels 1/4 Scanning
   
