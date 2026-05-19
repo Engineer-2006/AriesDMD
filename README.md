@@ -56,14 +56,16 @@ Vega Aries V3 (C-DAC)
 **Pixel Coordinate System**
 
  Single Panel:
- '''text
- (0,0) -----------------> X
+```text
+(0,0) -----------------> X
   |
   |
   |
   v
   Y
-  '''
+```
 
-  - Top left corner: (0,0)
-  - Bottom right corner: (W-1,H-1)
+- Top left corner: (0,0)
+- Bottom right corner: (W-1,H-1)
+
+---
