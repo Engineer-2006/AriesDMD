@@ -68,8 +68,11 @@ Vega Aries V3 (C-DAC)
 - Top left corner: (0,0)
 - Bottom right corner: (W-1,H-1)
 
+
 Multi Panel: Multiple panels are treated as one continuous display canvas.
+
 Example: AriesDMD dmd(4,1,...);
+
 Creates: 128 × 16 display 
 
 ---
