@@ -32,9 +32,7 @@ Most existing LED matrix libraries were written for AVR-based Arduino boards lik
 
 ---
 
-# 🟢 Supported Hardware**
-Microcontroller
-Vega Aries V3 (C-DAC)
+**🟢 Supported Hardware**: Microcontroller Vega Aries V3 (C-DAC)
 
 # 🖥 Supported Displays
 
@@ -45,7 +43,7 @@ Vega Aries V3 (C-DAC)
 | Indoor RGB                      |     HUB75     |    32x16   |     1/8     | AriesRGB32x16.h, AriesRGB32x16.cpp           |
 |                                 |               |    80x40   |     1/20    | AriesRGB.h, AriesRGB.cpp                     |
   
---> Features:
+**Features:**
 - Multi-panel cascading
 - Text rendering
 - 8 colour options
